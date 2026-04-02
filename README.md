@@ -2,8 +2,6 @@
 
 A 2D simulation where autonomous robots evolve over generations to efficiently collect energy while avoiding obstacles. Built with Python, Pygame, and Matplotlib.
 
-![Demo](demo.gif)
-
 ![Python](https://img.shields.io/badge/Python-3.11-blue) ![Pygame](https://img.shields.io/badge/Pygame-2.6.1-green) ![Matplotlib](https://img.shields.io/badge/Matplotlib-3.10-orange)
 
 ---
@@ -22,6 +20,8 @@ Each robot has a DNA encoding four genes:
 | Aggression | How strongly it steers toward food | 0.0 – 1.0 |
 
 ---
+
+![Demo](demo.gif)
 
 ## How It Works
 
