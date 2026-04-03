@@ -152,3 +152,5 @@ High mutation rates (40%) introduce too much noise and slow convergence. Low mut
 - **Sensor model:** Robots detect the nearest food/obstacle within their sensor range and steer accordingly
 
 ---
+
+IUS AI PROJECT 1
