@@ -13,9 +13,9 @@ from entities import spawn_obstacles, spawn_energies, spawn_robots
 from report  import ParameterPanel, ComparisonMode, build_report_surface
 
 
-# ---------------------------------------------------------------------------
+
 # DRAW HELPERS
-# ---------------------------------------------------------------------------
+
 def draw_stat_card(screen, fs, fm, x, y, label, value, color=WHITE):
     pygame.draw.rect(screen, OBSTACLE_COLOR, pygame.Rect(x, y, 224, 38), border_radius=6)
     screen.blit(fs.render(label, True, TEXT_DIM), (x+6, y+4))
@@ -49,9 +49,9 @@ def draw_mini_graph(screen, best_hist, avg_hist, x, y, w, h):
         pygame.draw.line(screen, AMBER,       pt(best_hist[i-1],i-1), pt(best_hist[i],i), 2)
 
 
-# ---------------------------------------------------------------------------
+
 # MAIN
-# ---------------------------------------------------------------------------
+
 def main():
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_W, SCREEN_H))

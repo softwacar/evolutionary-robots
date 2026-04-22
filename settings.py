@@ -1,6 +1,6 @@
-# ---------------------------------------------------------------------------
-# DEFAULT SETTINGS  (can be changed via parameter panel)
-# ---------------------------------------------------------------------------
+
+# DEFAULT SETTINGS  (Some can be changed via parameter panel)
+
 SCREEN_W      = 900
 SCREEN_H      = 600
 SIM_W         = 650
@@ -8,11 +8,11 @@ SIM_H         = 600
 PANEL_X       = 660
 FPS           = 60
 
-POPULATION    = 40
+POPULATION    = 10 #40
 ENERGY_COUNT  = 20
 OBS_COUNT     = 8
 GEN_TICKS     = 400
-ELITE_COUNT   = 6
+ELITE_COUNT   = 3
 MUTATION_RATE = 0.15
 
 # Colors

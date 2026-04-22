@@ -9,23 +9,32 @@ from settings import (
 from genetics import DNA
 
 
-# ---------------------------------------------------------------------------
-# ROBOT
-# ---------------------------------------------------------------------------
+
+# ROBOT CLASS
+#
+# - These are the individual entities of the population, we decided to call them Robots.
+#
+# - Robots have the main goal of collecting Energy, and avoiding Obstacles. 
+#   The fitness is defined by this goal.
+#
+# - The robots sense the environment, decide on the direction, and move.
+
 class Robot:
-    TRAIL_LEN = 20
-    RADIUS    = 7
+
+
+    TRAIL_LEN = 20  
+    RADIUS    = 7   
 
     def __init__(self, dna=None, sim_w=SIM_W, sim_h=SIM_H):
-        self.dna      = dna or DNA()
+        self.dna      = dna or DNA() # DNA class is defined in the genetics.py file
         self.x        = random.uniform(20, sim_w - 20)
         self.y        = random.uniform(20, sim_h - 20)
         self.angle    = random.uniform(0, math.pi * 2)
-        self.energy   = 1.0
-        self.fitness  = 0.0
+        self.energy   = 1.0 # Health points, if they go below 0, the robot dies
+        self.fitness  = 0.0 # The fitness score, used for selection
         self.alive    = True
         self.trail    = []
-        self.is_elite = False
+        self.is_elite = False # One of the top performers of the previous generation
         self.sim_w    = sim_w
         self.sim_h    = sim_h
 
@@ -49,6 +58,8 @@ class Robot:
     def update(self, energies, obstacles):
         if not self.alive:
             return
+        
+        # Being attracted to energy pellets
         delta  = (random.random() - 0.5) * self.dna.turn_rate * 2
         near_e = self.sense_nearest_energy(energies)
         if near_e:
@@ -58,6 +69,7 @@ class Robot:
             while diff < -math.pi: diff += 2 * math.pi
             delta += diff * 0.12 * self.dna.aggression
 
+        # Trying to avoid obstacles
         near_o, do = self.sense_nearest_obstacle(obstacles)
         if near_o:
             away = math.atan2(self.y - near_o.rect.centery,
@@ -67,10 +79,12 @@ class Robot:
             while diff < -math.pi: diff += 2 * math.pi
             delta += diff * max(0, 1 - do / 60) * 0.35
 
+        # The robots move similarly to cars where they go forward, and if they want to change direction, they turn
         self.angle += max(-self.dna.turn_rate, min(self.dna.turn_rate, delta))
         nx = self.x + math.cos(self.angle) * self.dna.speed
         ny = self.y + math.sin(self.angle) * self.dna.speed
 
+        # Bouncing off of the border
         if nx < self.RADIUS or nx > self.sim_w - self.RADIUS:
             self.angle = math.pi - self.angle
             nx = max(self.RADIUS, min(self.sim_w - self.RADIUS, nx))
@@ -78,6 +92,7 @@ class Robot:
             self.angle = -self.angle
             ny = max(self.RADIUS, min(self.sim_h - self.RADIUS, ny))
 
+        # Hitting an obstalce will decrease fitness
         hit = any(obs.rect.inflate(self.RADIUS*2, self.RADIUS*2).collidepoint(nx, ny)
                   for obs in obstacles)
         if hit:
@@ -87,12 +102,14 @@ class Robot:
         else:
             self.x, self.y = nx, ny
 
+        # Collecting energy increases fitness
         for e in energies:
             if e.alive and math.hypot(e.x - self.x, e.y - self.y) < self.RADIUS + e.radius:
                 e.alive       = False
                 self.fitness += 10
                 self.energy   = min(1.0, self.energy + 0.3)
 
+        # Fitness also increases slowly as time goes on, to reward staying alive
         self.energy  -= 0.0018
         self.fitness += 0.01
         if self.energy <= 0:
@@ -103,6 +120,7 @@ class Robot:
         if len(self.trail) > self.TRAIL_LEN:
             self.trail.pop(0)
 
+    # Drawing the Robot on the pygame canvas
     def draw(self, surface):
         if len(self.trail) > 1:
             ts = pygame.Surface((self.sim_w, self.sim_h), pygame.SRCALPHA)
@@ -151,9 +169,7 @@ class Robot:
         pygame.draw.rect(surface, bc, (bx, by, int(self.energy * bw), 3))
 
 
-# ---------------------------------------------------------------------------
-# OBSTACLE
-# ---------------------------------------------------------------------------
+# The Obstacle class, if the robots bunp into the obstacle, their fitness decreases
 class Obstacle:
     def __init__(self, x, y, w, h):
         self.rect = pygame.Rect(x, y, w, h)
@@ -163,9 +179,7 @@ class Obstacle:
         pygame.draw.rect(surface, OBSTACLE_BORDER, self.rect, 1, border_radius=4)
 
 
-# ---------------------------------------------------------------------------
-# ENERGY
-# ---------------------------------------------------------------------------
+# The energy class is for the energy pellets the robots are trying to collect
 class Energy:
     def __init__(self, sw=SIM_W, sh=SIM_H):
         self.x      = random.randint(15, sw - 15)
@@ -189,9 +203,7 @@ class Energy:
         pygame.draw.circle(surface, WHITE,         (int(self.x), int(self.y)), max(2, int(r*0.35)))
 
 
-# ---------------------------------------------------------------------------
-# SPAWN HELPERS
-# ---------------------------------------------------------------------------
+# Helper classes
 def spawn_obstacles(sw=SIM_W, sh=SIM_H, count=None):
     count = count or OBS_COUNT
     obs = []

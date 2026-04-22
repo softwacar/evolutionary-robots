@@ -12,9 +12,8 @@ from genetics import DNA, GeneticAlgorithm
 from entities import spawn_obstacles, spawn_energies, spawn_robots
 
 
-# ---------------------------------------------------------------------------
+
 # FAST SIMULATION  (no rendering, for comparison mode)
-# ---------------------------------------------------------------------------
 def run_fast_sim(pop, elite, mut_rate, gen_ticks, num_gens, obs_count, energy_count):
     """Run a full simulation silently and return best/avg history."""
     ga       = GeneticAlgorithm(pop=pop, elite=elite, mut=mut_rate, ticks=gen_ticks)
@@ -35,9 +34,8 @@ def run_fast_sim(pop, elite, mut_rate, gen_ticks, num_gens, obs_count, energy_co
     return ga.best_history, ga.avg_history
 
 
-# ---------------------------------------------------------------------------
+
 # PARAMETER PANEL
-# ---------------------------------------------------------------------------
 class ParameterPanel:
     """
     Overlay panel for editing simulation parameters.
@@ -119,9 +117,8 @@ class ParameterPanel:
                     (px + 20, py + ph - 24))
 
 
-# ---------------------------------------------------------------------------
+
 # COMPARISON MODE
-# ---------------------------------------------------------------------------
 class ComparisonMode:
     """
     Runs 3 fast simulations with different mutation rates and stores results.
@@ -199,9 +196,9 @@ class ComparisonMode:
                     (px + 20, bar_y + 16))
 
 
-# ---------------------------------------------------------------------------
+
 # MATPLOTLIB REPORT
-# ---------------------------------------------------------------------------
+
 def build_report_surface(ga, cmp=None):
     if ga.generation < 2:
         return None

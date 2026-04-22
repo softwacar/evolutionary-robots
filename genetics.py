@@ -2,9 +2,9 @@ import random
 from settings import (POPULATION, ELITE_COUNT, MUTATION_RATE, GEN_TICKS)
 
 
-# ---------------------------------------------------------------------------
+
 # DNA
-# ---------------------------------------------------------------------------
+
 class DNA:
     SPEED_MIN,  SPEED_MAX  = 0.5,  3.0
     TURN_MIN,   TURN_MAX   = 0.03, 0.15
@@ -14,9 +14,9 @@ class DNA:
     def __init__(self, speed=None, turn_rate=None,
                  sensor_range=None, aggression=None):
         self.speed        = speed        if speed        is not None else random.uniform(self.SPEED_MIN,  self.SPEED_MAX)
-        self.turn_rate    = turn_rate    if turn_rate    is not None else random.uniform(self.TURN_MIN,   self.TURN_MAX)
-        self.sensor_range = sensor_range if sensor_range is not None else random.uniform(self.SENSOR_MIN, self.SENSOR_MAX)
-        self.aggression   = aggression   if aggression   is not None else random.uniform(self.AGG_MIN,    self.AGG_MAX)
+        self.turn_rate    = turn_rate    if turn_rate    is not None else random.uniform(self.TURN_MIN,   0.06)
+        self.sensor_range = sensor_range if sensor_range is not None else random.uniform(self.SENSOR_MIN, 80)
+        self.aggression   = aggression   if aggression   is not None else random.uniform(self.AGG_MIN,    0.5)
 
     @staticmethod
     def crossover(a, b):
@@ -46,9 +46,9 @@ class DNA:
         return DNA(self.speed, self.turn_rate, self.sensor_range, self.aggression)
 
 
-# ---------------------------------------------------------------------------
+
 # GENETIC ALGORITHM
-# ---------------------------------------------------------------------------
+
 class GeneticAlgorithm:
     def __init__(self, pop=None, elite=None, mut=None, ticks=None):
         self.pop_size     = pop   or POPULATION
